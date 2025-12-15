@@ -1,0 +1,83 @@
+/* src/styles/FAQSection.css */
+
+.faq-section-container {
+  padding: calc(10 * var(--spacing-unit)) 0; /* 80px top/bottom padding */
+  background-color: var(--color-silver-light); /* Light background for contrast */
+}
+
+.faq-section-header {
+  text-align: center;
+  margin-bottom: calc(8 * var(--spacing-unit)); /* 64px space */
+}
+
+.faq-section-header h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--color-navy-blue);
+  margin-bottom: calc(2 * var(--spacing-unit));
+}
+
+.faq-section-header p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- Accordion Item Styles --- */
+.faq-item {
+  background-color: var(--color-white);
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius-card);
+  margin-bottom: calc(3 * var(--spacing-unit)); /* 24px space between items */
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: var(--shadow-subtle);
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: calc(4 * var(--spacing-unit)); /* 32px padding */
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-navy-blue);
+}
+
+.faq-icon {
+  font-size: 20px;
+  color: var(--color-primary-blue);
+  margin-left: calc(2 * var(--spacing-unit));
+  transition: transform 0.3s ease;
+}
+
+.faq-icon.open {
+  transform: rotate(45deg); /* Spin to an 'X' or '+' to '-' */
+}
+
+.faq-answer-container {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+}
+
+.faq-answer {
+  padding: 0 calc(4 * var(--spacing-unit)) calc(4 * var(--spacing-unit));
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Styles for when the answer is collapsed (handled by max-height in JS/React) */
+.collapsed {
+  max-height: 0;
+  padding-bottom: 0;
+}

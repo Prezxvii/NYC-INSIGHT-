@@ -1,0 +1,194 @@
+/* src/styles/Footer.css */
+
+.footer {
+  background: var(--color-white);
+  color: var(--color-navy-blue);
+  padding: calc(8 * var(--spacing-unit)) 0 calc(4 * var(--spacing-unit)) 0;
+  margin-top: calc(12 * var(--spacing-unit));
+  border-top: 1px solid rgba(0, 29, 61, 0.1);
+}
+
+.footerContent {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: calc(6 * var(--spacing-unit));
+  align-items: start;
+}
+
+/* Branding Section */
+.footer-branding {
+  display: flex;
+  flex-direction: column;
+  gap: calc(3 * var(--spacing-unit));
+}
+
+.footer-logo a {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-navy-blue);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.footer-logo a:hover {
+  opacity: 0.8;
+}
+
+.footer-logo strong {
+  font-weight: 900;
+}
+
+/* Footer Logo Icon - Same as Header */
+.footer-logo-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  background-image: url('../assets/nyc-insight-logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.footer-copyright {
+  font-size: 0.9rem;
+  color: rgba(0, 29, 61, 0.7);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Navigation Section */
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2 * var(--spacing-unit));
+}
+
+.footer-heading {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-navy-blue);
+  margin: 0 0 calc(2 * var(--spacing-unit)) 0;
+  letter-spacing: 0.5px;
+}
+
+.footer-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.5 * var(--spacing-unit));
+}
+
+.footer-nav-list a {
+  color: rgba(0, 29, 61, 0.8);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.footer-nav-list a:hover {
+  color: var(--color-navy-blue);
+}
+
+/* Social Media Section */
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: calc(2 * var(--spacing-unit));
+}
+
+.social-icons {
+  display: flex;
+  gap: calc(2 * var(--spacing-unit));
+  flex-wrap: wrap;
+}
+
+.social-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 29, 61, 0.08);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+}
+
+.social-icon:hover {
+  background: rgba(0, 29, 61, 0.15);
+  transform: translateY(-3px);
+}
+
+/* Screen Reader Only Text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Social Icon Placeholders - Add your icons here */
+.icon-twitter::before {
+  content: '𝕏';
+  font-size: 20px;
+  color: var(--color-navy-blue);
+}
+
+.icon-instagram::before {
+  content: '📷';
+  font-size: 20px;
+  color: var(--color-navy-blue);
+}
+
+.icon-youtube::before {
+  content: '▶';
+  font-size: 20px;
+  color: var(--color-navy-blue);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .footerContent {
+    grid-template-columns: 1fr 1fr;
+    gap: calc(4 * var(--spacing-unit));
+  }
+
+  .footer-branding {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .footerContent {
+    grid-template-columns: 1fr;
+    gap: calc(4 * var(--spacing-unit));
+    text-align: center;
+  }
+
+  .footer-logo a {
+    justify-content: center;
+  }
+
+  .footer-nav-list {
+    align-items: center;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .footer {
+    padding: calc(6 * var(--spacing-unit)) 0 calc(3 * var(--spacing-unit)) 0;
+  }
+}

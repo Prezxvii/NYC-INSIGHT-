@@ -1,0 +1,105 @@
+/* src/styles/SearchBar.css */
+
+.search-bar-container {
+  padding: calc(4 * var(--spacing-unit)) 0; 
+  display: flex;
+  flex-direction: column;
+  gap: calc(3 * var(--spacing-unit)); 
+  
+  /* FIX 1: Set max-width and center the container */
+  max-width: 800px; /* Limits the width of the entire bar */
+  margin: 0 auto; /* Centers the container within the page-container */
+}
+
+/* --- Search Input Group (Main Oval Shape) --- */
+.search-input-group {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-silver);
+  border-radius: 50px; 
+  box-shadow: var(--shadow-premium); 
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  height: 50px; 
+}
+
+/* Input Field Styling */
+.search-input {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem; 
+  padding: 0 20px; 
+  color: var(--color-black);
+  height: 100%; 
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+
+.search-input::placeholder {
+  color: #AAA;
+}
+
+/* --- Search Button (The dark, contrast piece) --- */
+.search-button {
+  background-color: var(--color-navy-blue);
+  color: var(--color-white);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-size: 20px; 
+  width: 40px; 
+  height: 40px; 
+  border-radius: 50%; 
+  margin-right: 5px; 
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
+  transition: transform 0.15s ease;
+  
+  /* Used for the simple icon look */
+  transform: rotate(45deg); 
+  font-weight: 900;
+}
+
+.search-button:hover {
+  transform: scale(1.05) rotate(45deg); 
+}
+
+/* --- Filter Buttons --- */
+.filter-group {
+  display: flex;
+  gap: calc(2 * var(--spacing-unit)); 
+  overflow-x: auto; 
+  padding-bottom: 5px; 
+  
+  /* FIX 2: Center the filters so they align visually with the search bar */
+  justify-content: center; 
+}
+
+.filter-button {
+  white-space: nowrap; 
+  padding: 8px 20px;
+  border: 1px solid var(--color-silver);
+  border-radius: 50px; 
+  background-color: var(--color-white);
+  color: var(--color-navy-blue);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-subtle);
+}
+
+.filter-button:hover {
+  background-color: var(--color-silver-light);
+}
+
+.filter-button.active {
+  background-color: var(--color-navy-blue);
+  color: var(--color-white);
+  border-color: var(--color-navy-blue);
+  box-shadow: var(--shadow-subtle);
+}

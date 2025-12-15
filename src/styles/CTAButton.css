@@ -1,0 +1,46 @@
+/* src/styles/CTAButton.css */
+
+.cta-button {
+  cursor: pointer;
+  padding: 10px 24px;
+  border: none;
+  border-radius: var(--border-radius-pill); /* Rounded (pill shape) */
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-subtle);
+}
+
+/* --- Glossy "Login" / "Sign Up" Button (Outline/Glossy Variant) --- */
+.cta-outline {
+  background-color: var(--color-white);
+  color: var(--color-navy-blue);
+  border: 1px solid var(--color-silver);
+  
+  /* Slight glassmorphism/glossy look using background image and border */
+  background: 
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.2)), 
+    var(--color-white);
+}
+
+.cta-outline:hover {
+  border-color: var(--color-navy-blue);
+  box-shadow: var(--shadow-premium);
+}
+
+/* --- Primary Variant (For Explore Now in Hero) --- */
+.cta-primary {
+  background-color: var(--color-navy-blue);
+  color: var(--color-white);
+  border: 1px solid var(--color-navy-blue);
+  
+  /* Soft glow effect */
+  box-shadow: 0 0 15px rgba(10, 26, 68, 0.5); 
+}
+
+.cta-primary:hover {
+  background-color: var(--color-black);
+  border-color: var(--color-black);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6); 
+}

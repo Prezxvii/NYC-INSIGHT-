@@ -1,0 +1,61 @@
+/* src/styles/GlobalStyles.css */
+
+/* --- 7. Colors & Branding (Your Theme) --- */
+:root {
+  /* Primary Colors */
+  --color-navy-blue: #0A1A44;
+  --color-white: #FFFFFF;
+  --color-silver: #C9C9C9;
+  --color-black: #000000;
+  
+  /* UI Style Guide */
+  --spacing-unit: 8px;
+  --border-radius-pill: 9999px; /* For pill-shaped buttons and search bar */
+  --border-radius-card: 20px; /* For rounded UI on cards */
+  --shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.08); /* Shadow level 1 for header/cards */
+  --shadow-premium: 0 8px 20px rgba(0, 0, 0, 0.15); /* Shadow level 2 for glossy look */
+}
+
+/* Basic Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-white);
+  color: var(--color-navy-blue);
+  line-height: 1.6;
+}
+
+/* Base Link Styling */
+a {
+  text-decoration: none;
+  color: var(--color-navy-blue);
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--color-black); /* Black for contrast on hover */
+}
+
+/* Global Container for Big Spacing */
+.page-container {
+    max-width: 1400px; /* Generous width for modern design */
+    margin: 0 auto;
+    padding: 0 calc(4 * var(--spacing-unit)); /* Padding for big spacing on sides (32px) */
+}
+
+/* Utility Class: Silver Divider (7.1. Divider.jsx) */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-silver);
+  margin: calc(4 * var(--spacing-unit)) 0; /* Big spacing (32px) above and below */
+}

@@ -1,0 +1,60 @@
+/* src/styles/App.css */
+
+/* CSS Variables */
+:root {
+  --spacing-unit: 8px;
+  --header-height: 80px;
+  --color-dark-blue-gradient: linear-gradient(135deg, #000814, #001d3d);
+  --color-navy-blue: #001d3d;
+  --color-navy-light: #003566;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --border-radius-large: 28px;
+}
+
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
+}
+
+/* Global container for responsive width and centering */
+.page-container {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: calc(4 * var(--spacing-unit)); 
+  padding-right: calc(4 * var(--spacing-unit));
+}
+
+/* FIX: Add padding to the main content area equal to the header height (80px) */
+/* This prevents the fixed header from overlapping the content */
+main {
+  padding-top: var(--header-height);
+  min-height: 100vh;
+}
+
+/* Responsive padding adjustments */
+@media (max-width: 768px) {
+  .page-container {
+    padding-left: calc(3 * var(--spacing-unit));
+    padding-right: calc(3 * var(--spacing-unit));
+  }
+}
+
+@media (max-width: 480px) {
+  .page-container {
+    padding-left: calc(2 * var(--spacing-unit));
+    padding-right: calc(2 * var(--spacing-unit));
+  }
+}

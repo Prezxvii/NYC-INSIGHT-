@@ -1,0 +1,107 @@
+/* src/styles/Header.css */
+
+/* --- General Header Styles --- */
+.header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  /* FIX: Set default background to solid white with shadow */
+  background-color: var(--color-white); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px; 
+}
+
+/* --- Left: Logo / Branding --- */
+.logo a {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-navy-blue);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.logo a strong {
+  font-weight: 900;
+  color: var(--color-black);
+}
+
+/* --- Logo Icon Placeholder (Your Custom Logo) --- */
+.header-logo-icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 8px;
+  
+  /* *** SVG INTEGRATION *** */
+  /* Assumes your SVG is at src/assets/nyc-insight-logo.svg */
+  background-image: url('../assets/nyc-insight-logo.png'); 
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* --- Center: Main Navigation --- */
+.navCenter {
+  display: flex;
+  gap: calc(4 * var(--spacing-unit)); /* 32px gap */
+  flex-grow: 1; 
+  justify-content: center; 
+}
+
+.navLink {
+  color: var(--color-navy-blue);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 5px 0;
+  transition: color 0.2s ease;
+}
+
+.navLink:hover {
+  color: var(--color-primary-blue);
+}
+
+/* --- Right: Auth Buttons --- */
+.authButtons {
+  display: flex;
+  align-items: center;
+  gap: calc(2 * var(--spacing-unit)); /* 16px gap between buttons */
+}
+
+/* --- Mobile Menu Placeholder --- */
+.mobileMenu {
+  display: none; /* Hide by default on desktop */
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-navy-blue);
+}
+
+
+/* --- Media Queries --- */
+@media (max-width: 1024px) {
+  /* Hide center navigation on medium screens */
+  .navCenter {
+      display: none;
+  }
+  /* Show mobile menu icon */
+  .mobileMenu {
+      display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Hide auth buttons on small screens */
+  .authButtons {
+      display: none;
+  }
+}

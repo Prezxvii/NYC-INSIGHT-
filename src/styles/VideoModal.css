@@ -1,0 +1,176 @@
+/* src/styles/VideoModal.css */
+
+.video-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.video-modal-content {
+  background: var(--color-white);
+  border-radius: 16px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.modal-close-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.modal-video-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  background: #000;
+  border-radius: 16px 16px 0 0;
+  overflow: hidden;
+}
+
+.modal-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.modal-video-info {
+  padding: calc(4 * var(--spacing-unit));
+}
+
+.modal-video-info h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-navy-blue);
+  margin-bottom: calc(2 * var(--spacing-unit));
+  line-height: 1.3;
+}
+
+.modal-source {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-white);
+  background-color: var(--color-navy-blue);
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-bottom: calc(2 * var(--spacing-unit));
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-description {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+  margin-top: calc(2 * var(--spacing-unit));
+}
+
+/* TikTok Notice */
+.tiktok-notice {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+  padding: calc(4 * var(--spacing-unit));
+}
+
+.tiktok-notice p {
+  font-size: 1.2rem;
+  margin-bottom: calc(3 * var(--spacing-unit));
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.external-link-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #003566, #001d3d);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 53, 102, 0.3);
+}
+
+.external-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 53, 102, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .video-modal-content {
+    max-width: 95%;
+    margin: 20px;
+  }
+
+  .modal-video-info h3 {
+    font-size: 1.25rem;
+  }
+
+  .modal-video-info {
+    padding: calc(3 * var(--spacing-unit));
+  }
+
+  .modal-close-button {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+/* Smooth Scrollbar for Modal */
+.video-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.video-modal-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.video-modal-content::-webkit-scrollbar-thumb {
+  background: var(--color-navy-blue);
+  border-radius: 10px;
+}
+
+.video-modal-content::-webkit-scrollbar-thumb:hover {
+  background: var(--color-navy-light);
+}

@@ -1,0 +1,42 @@
+/* src/styles/CTABanner.css */
+
+.cta-banner {
+  /* Full-width container using the page-container for internal width limit */
+  margin: calc(10 * var(--spacing-unit)) 0; /* Generous spacing above and below (80px) */
+  background-color: var(--color-navy-blue);
+  color: var(--color-white);
+  padding: calc(8 * var(--spacing-unit)) calc(4 * var(--spacing-unit)); /* 64px vertical padding */
+  border-radius: var(--border-radius-card); /* Consistent large rounding */
+  box-shadow: var(--shadow-premium); /* Ensure it looks high-quality */
+  text-align: center;
+}
+
+.cta-headline {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: calc(2 * var(--spacing-unit));
+  line-height: 1.2;
+}
+
+.cta-subtext {
+  font-size: 1.15rem;
+  font-weight: 400;
+  margin-bottom: calc(4 * var(--spacing-unit)); /* Space below text before button */
+  opacity: 0.9;
+}
+
+.cta-button-wrapper {
+  /* Ensure button is centered and has room for animation */
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive adjustment for font size */
+@media (max-width: 768px) {
+  .cta-headline {
+      font-size: 1.8rem;
+  }
+  .cta-banner {
+      padding: calc(6 * var(--spacing-unit)) calc(3 * var(--spacing-unit));
+  }
+}
