@@ -1,11 +1,16 @@
 // src/services/contentService.js
 
-// Base URLs for your backend API
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || '';
+// Base URL for your backend API (set in .env)
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://nyc-insight.onrender.com';
 
+/**
+ * Fetch news articles from backend
+ */
 export const fetchNewsArticles = async (query = 'New York', pageSize = 10) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/news?q=${encodeURIComponent(query)}&pageSize=${pageSize}`);
+    const response = await fetch(
+      `${BASE_URL}/api/news?q=${encodeURIComponent(query)}&pageSize=${pageSize}`
+    );
     const data = await response.json();
 
     return data.articles?.map(article => ({
@@ -24,9 +29,14 @@ export const fetchNewsArticles = async (query = 'New York', pageSize = 10) => {
   }
 };
 
+/**
+ * Fetch YouTube videos from backend
+ */
 export const fetchYouTubeVideos = async (query = 'New York City', maxResults = 10) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/youtube?q=${encodeURIComponent(query)}&maxResults=${maxResults}`);
+    const response = await fetch(
+      `${BASE_URL}/api/youtube?q=${encodeURIComponent(query)}&maxResults=${maxResults}`
+    );
     const data = await response.json();
 
     return data.items?.map(video => ({
@@ -45,9 +55,14 @@ export const fetchYouTubeVideos = async (query = 'New York City', maxResults = 1
   }
 };
 
+/**
+ * Fetch TikTok content from backend
+ */
 export const fetchTikTokContent = async (hashtag = 'newyork') => {
   try {
-    const response = await fetch(`${BASE_URL}/api/tiktok?hashtag=${encodeURIComponent(hashtag)}`);
+    const response = await fetch(
+      `${BASE_URL}/api/tiktok?hashtag=${encodeURIComponent(hashtag)}`
+    );
     const data = await response.json();
 
     if (!data.data?.videos) return [];
@@ -68,6 +83,9 @@ export const fetchTikTokContent = async (hashtag = 'newyork') => {
   }
 };
 
+/**
+ * Fetch all content combined
+ */
 export const fetchAllContent = async (filters = {}) => {
   const { query = 'New York', includeVideos = true, includeArticles = true } = filters;
   const promises = [];
@@ -80,7 +98,8 @@ export const fetchAllContent = async (filters = {}) => {
 
   try {
     const results = await Promise.all(promises);
-    return results.flat().filter(item => item !== null)
+    return results.flat()
+      .filter(item => item !== null)
       .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   } catch (error) {
     console.error('Error fetching all content:', error);
