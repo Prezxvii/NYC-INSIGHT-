@@ -56,45 +56,14 @@ export const fetchYouTubeVideos = async (query = 'New York City', maxResults = 1
 };
 
 /**
- * Fetch TikTok content from backend
- */
-export const fetchTikTokContent = async (hashtag = 'newyork') => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/api/tiktok?hashtag=${encodeURIComponent(hashtag)}`
-    );
-    const data = await response.json();
-
-    if (!data.data?.videos) return [];
-
-    return data.data.videos.slice(0, 10).map(video => ({
-      id: video.video_id || video.id,
-      title: video.title || video.desc || 'TikTok Video',
-      summary: (video.desc || 'Watch this TikTok video').substring(0, 150),
-      source: 'TikTok',
-      mediaUrl: video.cover || video.origin_cover,
-      link: video.play || `https://www.tiktok.com/@${video.author?.unique_id}/video/${video.video_id}`,
-      type: 'video',
-      publishedAt: video.create_time ? new Date(video.create_time * 1000).toISOString() : new Date().toISOString(),
-    }));
-  } catch (error) {
-    console.error('Error fetching TikTok content:', error);
-    return [];
-  }
-};
-
-/**
- * Fetch all content combined
+ * Fetch all content combined (News + YouTube)
  */
 export const fetchAllContent = async (filters = {}) => {
   const { query = 'New York', includeVideos = true, includeArticles = true } = filters;
   const promises = [];
 
   if (includeArticles) promises.push(fetchNewsArticles(query));
-  if (includeVideos) {
-    promises.push(fetchYouTubeVideos(query));
-    promises.push(fetchTikTokContent(query.toLowerCase().replace(/\s+/g, '')));
-  }
+  if (includeVideos) promises.push(fetchYouTubeVideos(query));
 
   try {
     const results = await Promise.all(promises);

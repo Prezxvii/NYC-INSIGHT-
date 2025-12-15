@@ -40,15 +40,13 @@ const ContentFeed = ({ searchQuery, activeFilter, previewMode = false, maxItems 
   useEffect(() => {
     // Filter content based on active filter
     let filtered = content;
-    
+
     if (activeFilter === 'Video') {
       filtered = content.filter(item => item.type === 'video');
     } else if (activeFilter === 'Article') {
       filtered = content.filter(item => item.type === 'article');
     } else if (activeFilter === 'YouTube') {
       filtered = content.filter(item => item.source === 'YouTube');
-    } else if (activeFilter === 'TikTok') {
-      filtered = content.filter(item => item.source === 'TikTok');
     }
 
     // If preview mode, limit to maxItems
@@ -94,8 +92,8 @@ const ContentFeed = ({ searchQuery, activeFilter, previewMode = false, maxItems 
         <div className="feed-grid">
           {filteredContent.length > 0 ? (
             filteredContent.map((item) => (
-              <NewsCard 
-                key={item.id} 
+              <NewsCard
+                key={item.id}
                 content={item}
                 onVideoClick={handleVideoClick}
               />
@@ -108,7 +106,7 @@ const ContentFeed = ({ searchQuery, activeFilter, previewMode = false, maxItems 
         {/* View All Button - Only show in preview mode */}
         {previewMode && (
           <div className="view-all-container">
-            <button 
+            <button
               className="view-all-button"
               onClick={() => navigate('/feed')}
             >
@@ -119,9 +117,9 @@ const ContentFeed = ({ searchQuery, activeFilter, previewMode = false, maxItems 
       </div>
 
       {selectedVideo && (
-        <VideoModal 
-          video={selectedVideo} 
-          onClose={handleCloseModal} 
+        <VideoModal
+          video={selectedVideo}
+          onClose={handleCloseModal}
         />
       )}
     </>
@@ -129,4 +127,5 @@ const ContentFeed = ({ searchQuery, activeFilter, previewMode = false, maxItems 
 };
 
 export default ContentFeed;
+
 

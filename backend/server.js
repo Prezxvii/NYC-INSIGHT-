@@ -18,7 +18,9 @@ app.get("/api/news", async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&language=en&pageSize=${pageSize}&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`
+      `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+        query
+      )}&language=en&pageSize=${pageSize}&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`
     );
     const data = await response.json();
     res.json(data);
@@ -47,35 +49,7 @@ app.get("/api/youtube", async (req, res) => {
   }
 });
 
-// --- TikTok API Route via RapidAPI ---
-app.get("/api/tiktok", async (req, res) => {
-  const hashtag = req.query.hashtag || "newyork";
-
-  try {
-    const response = await fetch(
-      `https://tiktok-scraper7.p.rapidapi.com/hashtag/posts?hashtag=${encodeURIComponent(
-        hashtag
-      )}&count=10`,
-      {
-        method: "GET",
-        headers: {
-          "X-RapidAPI-Key": process.env.RAPIDAPI_KEY,
-          "X-RapidAPI-Host": "tiktok-scraper7.p.rapidapi.com",
-        },
-      }
-    );
-    const data = await response.json();
-
-    if (!data.data?.videos) {
-      return res.json({ data: { videos: [] } });
-    }
-
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Failed to fetch TikTok data" });
-  }
-});
-
 // --- Start Server ---
-app.listen(PORT, () => console.log(`Backend server running on port ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Backend server running on port ${PORT}`)
+);
