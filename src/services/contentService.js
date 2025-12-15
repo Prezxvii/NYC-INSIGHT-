@@ -1,24 +1,13 @@
 // src/services/contentService.js
 
-const API_KEYS = {
-  news: '46c7224f350846e0b5932cb038f8e6e0',
-  youtube: 'AIzaSyA9dX5bHvyUk8OGp2gKZGl9HuWIXwN6xno',
-  rapidapi: '588ebdf86amsh6896d4018de52d4p1aa9c8jsn9596c34491d3'
-};
+// Base URLs for your backend API
+const BASE_URL = process.env.REACT_APP_BACKEND_URL || '';
 
-// News API Integration (NewsAPI.org)
 export const fetchNewsArticles = async (query = 'New York', pageSize = 10) => {
   try {
-    const response = await fetch(
-      `https://newsapi.org/v2/everything?q=${query}&language=en&pageSize=${pageSize}&sortBy=publishedAt&apiKey=${API_KEYS.news}`
-    );
+    const response = await fetch(`${BASE_URL}/api/news?q=${encodeURIComponent(query)}&pageSize=${pageSize}`);
     const data = await response.json();
-    
-    if (data.status === 'error') {
-      console.error('News API Error:', data.message);
-      return [];
-    }
-    
+
     return data.articles?.map(article => ({
       id: article.url,
       title: article.title,
@@ -35,19 +24,11 @@ export const fetchNewsArticles = async (query = 'New York', pageSize = 10) => {
   }
 };
 
-// YouTube API Integration
 export const fetchYouTubeVideos = async (query = 'New York City', maxResults = 10) => {
   try {
-    const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&maxResults=${maxResults}&order=date&key=${API_KEYS.youtube}`
-    );
+    const response = await fetch(`${BASE_URL}/api/youtube?q=${encodeURIComponent(query)}&maxResults=${maxResults}`);
     const data = await response.json();
-    
-    if (data.error) {
-      console.error('YouTube API Error:', data.error.message);
-      return [];
-    }
-    
+
     return data.items?.map(video => ({
       id: video.id.videoId,
       title: video.snippet.title,
@@ -64,26 +45,13 @@ export const fetchYouTubeVideos = async (query = 'New York City', maxResults = 1
   }
 };
 
-// TikTok Integration using RapidAPI
 export const fetchTikTokContent = async (hashtag = 'newyork') => {
   try {
-    const response = await fetch(
-      `https://tiktok-scraper7.p.rapidapi.com/hashtag/posts?hashtag=${hashtag}&count=10`,
-      {
-        method: 'GET',
-        headers: {
-          'X-RapidAPI-Key': API_KEYS.rapidapi,
-          'X-RapidAPI-Host': 'tiktok-scraper7.p.rapidapi.com'
-        }
-      }
-    );
+    const response = await fetch(`${BASE_URL}/api/tiktok?hashtag=${encodeURIComponent(hashtag)}`);
     const data = await response.json();
-    
-    if (!data.data?.videos) {
-      console.log('No TikTok videos found');
-      return [];
-    }
-    
+
+    if (!data.data?.videos) return [];
+
     return data.data.videos.slice(0, 10).map(video => ({
       id: video.video_id || video.id,
       title: video.title || video.desc || 'TikTok Video',
@@ -100,29 +68,20 @@ export const fetchTikTokContent = async (hashtag = 'newyork') => {
   }
 };
 
-// Combined Content Fetch - Mix all sources
 export const fetchAllContent = async (filters = {}) => {
   const { query = 'New York', includeVideos = true, includeArticles = true } = filters;
-  
   const promises = [];
-  
-  if (includeArticles) {
-    promises.push(fetchNewsArticles(query));
-  }
-  
+
+  if (includeArticles) promises.push(fetchNewsArticles(query));
   if (includeVideos) {
     promises.push(fetchYouTubeVideos(query));
     promises.push(fetchTikTokContent(query.toLowerCase().replace(/\s+/g, '')));
   }
-  
+
   try {
     const results = await Promise.all(promises);
-    const allContent = results.flat().filter(item => item !== null);
-    
-    // Sort by published date (newest first)
-    return allContent.sort((a, b) => 
-      new Date(b.publishedAt) - new Date(a.publishedAt)
-    );
+    return results.flat().filter(item => item !== null)
+      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
   } catch (error) {
     console.error('Error fetching all content:', error);
     return [];
