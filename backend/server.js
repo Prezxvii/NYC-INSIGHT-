@@ -1,162 +1,210 @@
-// src/services/contentService.js
+// server.js
+import express from "express";
+import fetch from "node-fetch";
+import dotenv from "dotenv";
+import cors from "cors";
 
-// Base URL for your backend API
-const BASE_URL = process.env.REACT_APP_BACKEND_URL || 'https://nyc-insight.onrender.com';
+dotenv.config();
 
-/**
- * Fetch news articles from backend
- */
-export const fetchNewsArticles = async (query = 'New York', pageSize = 10) => {
+const app = express();
+const PORT = process.env.PORT || 10000;
+
+// CORS configuration - Allow your Vercel frontend
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://nyc-insight-wxrh.vercel.app',
+    'https://nyc-insight.onrender.com'
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.use(express.json());
+
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.json({ 
+    status: "ok", 
+    message: "NYC Insight Backend API is running",
+    timestamp: new Date().toISOString(),
+    endpoints: [
+      "/api/health",
+      "/api/news",
+      "/api/youtube"
+    ]
+  });
+});
+
+// Detailed health check
+app.get("/api/health", (req, res) => {
+  res.json({ 
+    status: "healthy",
+    newsApiKey: !!process.env.NEWS_API_KEY,
+    youtubeApiKey: !!process.env.YOUTUBE_API_KEY,
+    port: PORT,
+    timestamp: new Date().toISOString()
+  });
+});
+
+// --- News API Route ---
+app.get("/api/news", async (req, res) => {
+  const query = req.query.q || "New York";
+  const pageSize = Math.min(parseInt(req.query.pageSize) || 10, 100); // Max 100
+
+  console.log(`📰 Fetching news for: "${query}" (pageSize: ${pageSize})`);
+
+  if (!process.env.NEWS_API_KEY) {
+    console.error("❌ NEWS_API_KEY is not set");
+    return res.status(500).json({ 
+      status: "error",
+      message: "News API key not configured",
+      articles: []
+    });
+  }
+
   try {
-    console.log('Fetching news articles for:', query);
-    
-    const response = await fetch(
-      `${BASE_URL}/api/news?q=${encodeURIComponent(query)}&pageSize=${pageSize}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
+      query
+    )}&language=en&pageSize=${pageSize}&sortBy=publishedAt&apiKey=${process.env.NEWS_API_KEY}`;
 
+    const response = await fetch(url);
+    
     if (!response.ok) {
-      throw new Error(`News API responded with status: ${response.status}`);
+      throw new Error(`NewsAPI HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    
-    console.log('News API response:', data);
 
     if (data.status === 'error') {
-      console.error('News API Error:', data.message);
-      return [];
+      console.error('❌ News API Error:', data.message);
+      return res.status(400).json({ 
+        status: "error",
+        message: data.message,
+        code: data.code,
+        articles: []
+      });
     }
 
-    if (!data.articles || data.articles.length === 0) {
-      console.warn('No articles found');
-      return [];
-    }
-
-    return data.articles.map(article => ({
-      id: article.url || `article-${Date.now()}-${Math.random()}`,
-      title: article.title || 'Untitled Article',
-      summary: article.description || 'No description available',
-      source: article.source?.name || 'Unknown Source',
-      mediaUrl: article.urlToImage || 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600',
-      link: article.url || '#',
-      type: 'article',
-      publishedAt: article.publishedAt || new Date().toISOString(),
-    }));
-  } catch (error) {
-    console.error('Error fetching news articles:', error);
-    return [];
-  }
-};
-
-/**
- * Fetch YouTube videos from backend
- */
-export const fetchYouTubeVideos = async (query = 'New York City', maxResults = 10) => {
-  try {
-    console.log('Fetching YouTube videos for:', query);
+    const articleCount = data.articles?.length || 0;
+    console.log(`✅ Successfully fetched ${articleCount} news articles`);
     
-    const response = await fetch(
-      `${BASE_URL}/api/youtube?q=${encodeURIComponent(query)}&maxResults=${maxResults}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    res.json({
+      status: "ok",
+      totalResults: data.totalResults,
+      articles: data.articles || []
+    });
 
+  } catch (error) {
+    console.error("❌ News API Error:", error.message);
+    res.status(500).json({ 
+      status: "error",
+      message: "Failed to fetch news",
+      error: error.message,
+      articles: []
+    });
+  }
+});
+
+// --- YouTube API Route ---
+app.get("/api/youtube", async (req, res) => {
+  const query = req.query.q || "New York City";
+  const maxResults = Math.min(parseInt(req.query.maxResults) || 10, 50); // Max 50
+
+  console.log(`📺 Fetching YouTube videos for: "${query}" (maxResults: ${maxResults})`);
+
+  if (!process.env.YOUTUBE_API_KEY) {
+    console.error("❌ YOUTUBE_API_KEY is not set");
+    return res.status(500).json({ 
+      error: { message: "YouTube API key not configured" },
+      items: []
+    });
+  }
+
+  try {
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
+      query
+    )}&type=video&maxResults=${maxResults}&order=date&key=${process.env.YOUTUBE_API_KEY}`;
+
+    const response = await fetch(url);
+    
     if (!response.ok) {
-      throw new Error(`YouTube API responded with status: ${response.status}`);
+      throw new Error(`YouTube API HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    
-    console.log('YouTube API response:', data);
 
     if (data.error) {
-      console.error('YouTube API Error:', data.error.message);
-      return [];
+      console.error('❌ YouTube API Error:', data.error.message);
+      return res.status(400).json({ 
+        error: { 
+          message: data.error.message,
+          code: data.error.code 
+        },
+        items: []
+      });
     }
 
-    if (!data.items || data.items.length === 0) {
-      console.warn('No videos found');
-      return [];
-    }
-
-    return data.items.map(video => ({
-      id: video.id?.videoId || `video-${Date.now()}-${Math.random()}`,
-      title: video.snippet?.title || 'Untitled Video',
-      summary: (video.snippet?.description || 'No description available').substring(0, 150) + '...',
-      source: 'YouTube',
-      mediaUrl: video.snippet?.thumbnails?.high?.url || 
-                video.snippet?.thumbnails?.medium?.url || 
-                video.snippet?.thumbnails?.default?.url ||
-                'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=600',
-      link: `https://www.youtube.com/watch?v=${video.id?.videoId}`,
-      type: 'video',
-      publishedAt: video.snippet?.publishedAt || new Date().toISOString(),
-    }));
-  } catch (error) {
-    console.error('Error fetching YouTube videos:', error);
-    return [];
-  }
-};
-
-/**
- * Fetch all content combined (News + YouTube)
- */
-export const fetchAllContent = async (filters = {}) => {
-  const { query = 'New York', includeVideos = true, includeArticles = true } = filters;
-  
-  console.log('Fetching all content with filters:', filters);
-  
-  const promises = [];
-  
-  if (includeArticles) {
-    promises.push(fetchNewsArticles(query));
-  }
-  
-  if (includeVideos) {
-    promises.push(fetchYouTubeVideos(query));
-  }
-
-  try {
-    const results = await Promise.all(promises);
-    const allContent = results.flat().filter(item => item !== null);
+    const videoCount = data.items?.length || 0;
+    console.log(`✅ Successfully fetched ${videoCount} YouTube videos`);
     
-    console.log(`Total content fetched: ${allContent.length} items`);
-    
-    // Sort by published date (newest first)
-    const sortedContent = allContent.sort((a, b) => 
-      new Date(b.publishedAt) - new Date(a.publishedAt)
-    );
-    
-    return sortedContent;
-  } catch (error) {
-    console.error('Error fetching all content:', error);
-    return [];
-  }
-};
+    res.json({
+      pageInfo: data.pageInfo,
+      items: data.items || []
+    });
 
-// Test function to check if backend is reachable
-export const testBackendConnection = async () => {
-  try {
-    const response = await fetch(`${BASE_URL}/api/news?q=test&pageSize=1`);
-    if (response.ok) {
-      console.log(' Backend connection successful');
-      return true;
-    } else {
-      console.error(' Backend responded with error:', response.status);
-      return false;
-    }
   } catch (error) {
-    console.error(' Cannot reach backend:', error);
-    return false;
+    console.error("❌ YouTube API Error:", error.message);
+    res.status(500).json({ 
+      error: { message: "Failed to fetch YouTube data" },
+      items: []
+    });
   }
-};
+});
+
+// 404 handler
+app.use((req, res) => {
+  console.log(`❌ 404 - Route not found: ${req.method} ${req.path}`);
+  res.status(404).json({ 
+    error: "Endpoint not found",
+    path: req.path,
+    availableEndpoints: [
+      "/",
+      "/api/health",
+      "/api/news?q=query&pageSize=10",
+      "/api/youtube?q=query&maxResults=10"
+    ]
+  });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error("❌ Unhandled error:", err.stack);
+  res.status(500).json({ 
+    error: "Internal server error",
+    message: err.message 
+  });
+});
+
+// --- Start Server ---
+app.listen(PORT, () => {
+  console.log(`
+╔════════════════════════════════════════════════════════════╗
+║  🚀 NYC Insight Backend Server                             ║
+╠════════════════════════════════════════════════════════════╣
+║  Port:              ${PORT}                                  ║
+║  Health Check:      http://localhost:${PORT}/api/health     ║
+║  News API Key:      ${process.env.NEWS_API_KEY ? '✅ Configured' : '❌ Missing'}            ║
+║  YouTube API Key:   ${process.env.YOUTUBE_API_KEY ? '✅ Configured' : '❌ Missing'}            ║
+║  Environment:       ${process.env.NODE_ENV || 'development'}               ║
+╚════════════════════════════════════════════════════════════╝
+  `);
+  
+  console.log("\n📍 Available Endpoints:");
+  console.log("   GET  /                    - API Info");
+  console.log("   GET  /api/health          - Health Check");
+  console.log("   GET  /api/news            - Fetch News Articles");
+  console.log("   GET  /api/youtube         - Fetch YouTube Videos");
+  console.log("\n✨ Server is ready to accept requests!\n");
+});
