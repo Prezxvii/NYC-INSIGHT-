@@ -56,7 +56,7 @@ app.get("/api/news", async (req, res) => {
   console.log(`📰 Fetching news for: "${query}" (pageSize: ${pageSize})`);
 
   if (!process.env.NEWS_API_KEY) {
-    console.error("❌ NEWS_API_KEY is not set");
+    console.error(" NEWS_API_KEY is not set");
     return res.status(500).json({ 
       status: "error",
       message: "News API key not configured",
@@ -78,7 +78,7 @@ app.get("/api/news", async (req, res) => {
     const data = await response.json();
 
     if (data.status === 'error') {
-      console.error('❌ News API Error:', data.message);
+      console.error(' News API Error:', data.message);
       return res.status(400).json({ 
         status: "error",
         message: data.message,
@@ -88,7 +88,7 @@ app.get("/api/news", async (req, res) => {
     }
 
     const articleCount = data.articles?.length || 0;
-    console.log(`✅ Successfully fetched ${articleCount} news articles`);
+    console.log(` Successfully fetched ${articleCount} news articles`);
     
     res.json({
       status: "ok",
@@ -97,7 +97,7 @@ app.get("/api/news", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ News API Error:", error.message);
+    console.error(" News API Error:", error.message);
     res.status(500).json({ 
       status: "error",
       message: "Failed to fetch news",
@@ -115,7 +115,7 @@ app.get("/api/youtube", async (req, res) => {
   console.log(`📺 Fetching YouTube videos for: "${query}" (maxResults: ${maxResults})`);
 
   if (!process.env.YOUTUBE_API_KEY) {
-    console.error("❌ YOUTUBE_API_KEY is not set");
+    console.error(" YOUTUBE_API_KEY is not set");
     return res.status(500).json({ 
       error: { message: "YouTube API key not configured" },
       items: []
@@ -136,7 +136,7 @@ app.get("/api/youtube", async (req, res) => {
     const data = await response.json();
 
     if (data.error) {
-      console.error('❌ YouTube API Error:', data.error.message);
+      console.error(' YouTube API Error:', data.error.message);
       return res.status(400).json({ 
         error: { 
           message: data.error.message,
@@ -147,7 +147,7 @@ app.get("/api/youtube", async (req, res) => {
     }
 
     const videoCount = data.items?.length || 0;
-    console.log(`✅ Successfully fetched ${videoCount} YouTube videos`);
+    console.log(`Successfully fetched ${videoCount} YouTube videos`);
     
     res.json({
       pageInfo: data.pageInfo,
@@ -155,7 +155,7 @@ app.get("/api/youtube", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ YouTube API Error:", error.message);
+    console.error(" YouTube API Error:", error.message);
     res.status(500).json({ 
       error: { message: "Failed to fetch YouTube data" },
       items: []
@@ -165,7 +165,7 @@ app.get("/api/youtube", async (req, res) => {
 
 // 404 handler
 app.use((req, res) => {
-  console.log(`❌ 404 - Route not found: ${req.method} ${req.path}`);
+  console.log(` 404 - Route not found: ${req.method} ${req.path}`);
   res.status(404).json({ 
     error: "Endpoint not found",
     path: req.path,
@@ -180,7 +180,7 @@ app.use((req, res) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error("❌ Unhandled error:", err.stack);
+  console.error(" Unhandled error:", err.stack);
   res.status(500).json({ 
     error: "Internal server error",
     message: err.message 
@@ -191,20 +191,20 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════════════════════════╗
-║  🚀 NYC Insight Backend Server                             ║
+║   NYC Insight Backend Server                             ║
 ╠════════════════════════════════════════════════════════════╣
 ║  Port:              ${PORT}                                  ║
 ║  Health Check:      http://localhost:${PORT}/api/health     ║
-║  News API Key:      ${process.env.NEWS_API_KEY ? '✅ Configured' : '❌ Missing'}            ║
-║  YouTube API Key:   ${process.env.YOUTUBE_API_KEY ? '✅ Configured' : '❌ Missing'}            ║
+║  News API Key:      ${process.env.NEWS_API_KEY ? ' Configured' : ' Missing'}            ║
+║  YouTube API Key:   ${process.env.YOUTUBE_API_KEY ? ' Configured' : ' Missing'}            ║
 ║  Environment:       ${process.env.NODE_ENV || 'development'}               ║
 ╚════════════════════════════════════════════════════════════╝
   `);
   
-  console.log("\n📍 Available Endpoints:");
+  console.log("\n Available Endpoints:");
   console.log("   GET  /                    - API Info");
   console.log("   GET  /api/health          - Health Check");
   console.log("   GET  /api/news            - Fetch News Articles");
   console.log("   GET  /api/youtube         - Fetch YouTube Videos");
-  console.log("\n✨ Server is ready to accept requests!\n");
+  console.log("\n Server is ready to accept requests!\n");
 });
