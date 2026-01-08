@@ -17,7 +17,7 @@ NYC Insight is a **real-time content aggregation platform** that curates the lat
 - **Frontend & UX:** Built a responsive, filterable content feed using **React Hooks**, reusable components, and dynamic **search and category filtering** for articles and videos.
 - **Architecture & Deployment:** Implemented a **production-ready architecture** with the frontend deployed on **Vercel** and the backend hosted on **Render**, enabling scalable, real-world API consumption.
 
-🔗 **Live Application:** *(add your live URL here if available)*
+🔗 **Live Application:** *(https://nyc-insight-wxrh.vercel.app)*
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
